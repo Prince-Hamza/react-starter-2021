@@ -157,7 +157,7 @@ class streamingCompiler {
 
             try {
                 parseFinalize = JSON.parse(finalize)
-                console.log(`final Product : ${parseFinalize}`)
+                // console.log(`final Product : ${parseFinalize}`)
             } catch (ex) {
                 console.log('')
             }

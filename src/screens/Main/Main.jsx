@@ -37,7 +37,8 @@ export default class PriceStock extends Component {
 			FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: false, Images: false, Attributes: false },
 			firewallRadio: true,
 			denmarkRadio: false,
-			Updated: 0
+			Updated: 0,
+			concurrency: 10
 		}
 	}
 
@@ -110,12 +111,12 @@ export default class PriceStock extends Component {
 		// }
 
 
-		if (this.state.NextSequence == true && this.state.HoldPro.length >= 2) {
+		if (this.state.NextSequence == true && this.state.HoldPro.length >= this.state.concurrency) {
 
 			console.log(`Hold Pro Length >= 25 `)
 			console.log(`Send Pro Length on init:: ${this.state.SendPro.length}`)
 
-			for (let n = 0; n <= 1; n++) {
+			for (let n = 0; n <= this.state.concurrency - 1; n++) {
 				this.state.SendPro[n] = this.state.HoldPro.shift()
 				console.log(`Product ${n} :: ${this.state.SendPro[n]}`)
 			}
@@ -140,7 +141,6 @@ export default class PriceStock extends Component {
 		console.log(`Pro Count :: ${Pro.length}`)
 		Pro = this.refineStockPrices(Pro)
 
-
 		var jsonBody = { products: Pro }
 
 		var App = this;
@@ -154,36 +154,23 @@ export default class PriceStock extends Component {
 			data: jsonBody
 		};
 
-		alert("sending Request")
 
 		await axios(config)
 			.then(function (response) {
-				alert(JSON.stringify(response.data));
+				console.log(JSON.stringify(response.data));
 			})
 			.catch(function (error) {
-				alert(error);
+				console.log(error);
 			});
 
 
-
-		// const resp = await axios.post('https://us-central1-my-first-project-ce24e.cloudfunctions.net/UpdateFirewallForce',
-		// 	{ info: Pro, categories: this.state.Categories, pronum: this.state.ParallelPros, Select: this.state.FormInfo },
-		// 	{
-		// 		headers: { 'content-type': 'application/json' },
-		// 		timeout: 0
-		// 	},
-		// )
-		// var respJson = await resp.data
-		// var jsnArray = respJson.info
-
-
-		ProductCount += 2;
+		ProductCount += this.state.concurrency;
 
 		console.log(`Products :: ${ProductCount}`)
 
 		App.setState({
 			//Updated: this.state.Updated + jsnArray[jsnArray.length - 1].updated,
-			SequenceCount: this.state.SequenceCount + 2,
+			SequenceCount: this.state.SequenceCount + this.state.concurrency,
 			NextSequence: true
 		})
 
@@ -192,16 +179,30 @@ export default class PriceStock extends Component {
 
 	refineStockPrices = (Products) => {
 		Products.map((product) => {
-			if (product.hasOwnProperty('productPriceInfo') == false && product.hasOwnProperty('supplierPriceInfo') == false) {
-				product.productPriceInfo = { price: 0 }
+			if (product.hasOwnProperty('productPriceInfo') == false || product.hasOwnProperty('supplierPriceInfo') == false) {
+				product.supplierPriceInfo = { price: 0 }
 			}
-			if (product.hasOwnProperty('productStockInfo') == false && product.hasOwnProperty('supplierStockInfo') == false && product.hasOwnProperty("aggregatedStock") == false) {
-				product.productStockInfo = { stock: 0 }
+			if (product.hasOwnProperty('productStockInfo') == false || product.hasOwnProperty('supplierStockInfo') == false || product.hasOwnProperty("aggregatedStock") == false) {
+				product.supplierStockInfo = { stock: 0 }
 			}
-			if (product.hasOwnProperty('productStockInfo') == false && product.hasOwnProperty('supplierStockInfo') == false && product.hasOwnProperty("aggregatedStockStatusText") == false) {
-				product.productStockInfo = { stock: 0, stockStatusText: "Not Available" }
+
+			if (product.hasOwnProperty('productStockInfo') == false || product.hasOwnProperty('supplierStockInfo') == false || product.hasOwnProperty("aggregatedStockStatusText") == false) {
+				product.supplierStockInfo = { stock: 0, stockStatusText: "Not Available" }
 			}
+
+			if (product.hasOwnProperty('aggregatedStockStatusText' == false)) {
+				product.aggregatedStockStatusText = product.supplierStockInfo.stockStatusText
+			}
+
+			if (product.hasOwnProperty('standardHtmlDatasheet') == false) {
+				product.standardHtmlDatasheet = "abc"
+			}
+
+			product.fields_in_response = ['id', 'sku', 'stock']
+			product.type = 'simple'
 		})
+
+
 
 		return Products
 	}
