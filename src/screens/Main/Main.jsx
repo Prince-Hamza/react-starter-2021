@@ -38,7 +38,7 @@ export default class PriceStock extends Component {
 			firewallRadio: true,
 			denmarkRadio: false,
 			Updated: 0,
-			concurrency: 10
+			concurrency: 2
 		}
 	}
 
