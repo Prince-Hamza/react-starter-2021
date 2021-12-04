@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Schedule from '../Schedule'
 import axios from "axios";
 import { initializeApp } from '@firebase/app'
 import { firebaseConfig } from '../config'
@@ -38,7 +39,8 @@ export default class PriceStock extends Component {
 			firewallRadio: true,
 			denmarkRadio: false,
 			Updated: 0,
-			concurrency: 2
+			concurrency: 2,
+			Interface: 'Schedule'
 		}
 	}
 
@@ -288,79 +290,54 @@ export default class PriceStock extends Component {
 		this.setState({ FormInfo: this.state.FormInfo })
 	}
 
+	devieSelect = () => {
+		
+	}
+
 	render() {
-		return (
-			<div style={Styles.Theme} >
-				{/* <input type="file" onChange={(e) => { this.getFileContext(e) }} />
+		if (this.state.Interface == 'Local') {
+
+
+
+			return (
+				<div style={Styles.Theme} >
+					{/* <input type="file" onChange={(e) => { this.getFileContext(e) }} />
 				<h5> {this.state.progressInstance} </h5> */}
 
-				<input type="text" style={Styles.inputBox} placeholder="      Export Key" value={this.state.exportKey}
-					onChange={(e) => { this.setState({ exportKey: e.target.value }) }} />
+					<input type="text" style={Styles.inputBox} placeholder="      Export Key" value={this.state.exportKey}
+						onChange={(e) => { this.setState({ exportKey: e.target.value }) }} />
 
-				<button style={Styles.Button} onClick={() => { this.onProduct() }} >Start</button>
-				<h5> {this.state.SeqFinish} </h5>
+					<button style={Styles.Button} onClick={() => { this.onProduct() }} >Start</button>
+					<h5> {this.state.SeqFinish} </h5>
 
-				<div style={Styles.Circle}>
-					<div>	{this.state.SequenceCount}	</div>
-					<p style={{ font: 'bold 12px times new roman' }} >	analyzed </p>
-				</div>
-
-				<div style={Styles.Circle2}>
-					<div>	{this.state.Updated}	</div>
-					<p style={{ font: 'bold 12px times new roman' }} >	updated </p>
-				</div>
-
-
-
-
-				<div style={Styles.Form}>
-
-					<div style={Styles.Card} >
-						<input type="radio" style={Styles.Left} checked={this.state.firewallRadio} onChange={() => { this.radioChange('fire') }} />
-						<p style={Styles.Right} > Firewallforce </p>
+					<div style={Styles.Circle}>
+						<div>	{this.state.SequenceCount}	</div>
+						<p style={{ font: 'bold 12px times new roman' }} >	analyzed </p>
 					</div>
 
-					<div style={Styles.Card} >
-						<input type="radio" style={Styles.Left} checked={this.state.denmarkRadio} onChange={() => { this.radioChange('den') }} />
-						<p style={Styles.Right} > Denmark.com </p>
+					<div style={Styles.Circle2}>
+						<div>	{this.state.Updated}	</div>
+						<p style={{ font: 'bold 12px times new roman' }} >	updated </p>
 					</div>
+
+
+
+
+
+
 					{/* 
-				<div style= {Styles.Card} >
-					<input type="checkbox" checked={this.state.FormInfo.priceStock} style={Styles.Left} onChange={()=> {this.setValue('priceStock')}} />
-					<p style={Styles.Right}> Prices & Stock </p> 
-						</div>
-
-
-				<div style= {Styles.Card} >
-				<input type="checkbox" style={Styles.Left} checked={this.state.FormInfo.Categories} onChange={()=> this.setValue('Categories')} />
-					<p style={Styles.Right} > Category </p> 
-				</div>
-
-				<div style= {Styles.Card} >
-					<input type="checkbox" style={Styles.Left} checked={this.state.FormInfo.Images} onChange={()=> {this.setValue('Images')}} />
-					<p style={Styles.Right} > Images </p> 
-				</div>
-
-				<div style= {Styles.Card} >
-					<input type="checkbox" style={Styles.Left} checked={this.state.FormInfo.Attributes} onChange={()=>{this.setValue('Attributes')}} />
-					<p style={Styles.Right} > Attributes </p> 
-				</div> */}
-
-					<div style={{ ...Styles.Card, flexDirection: 'column', alignItems: 'center' }} >
-						<p style={{ ...Styles.Left, color: 'magenta' }} > Resume From Here </p>
-						<input type='number' style={{ ...Styles.ResumeInput }} value={this.state.ResumeFrom} onChange={(e) => { this.handleResume(e) }} />
-					</div>
-				</div>
-
-
-				{/* 
 				<div style={{width:'100%' , height:"25px" , backgroundColor:"white"}} id = "htmlspec" >
 
 				</div> */}
 
 
-			</div>
-		)
+				</div>
+			)
+		} else if (this.state.Interface == 'Schedule') {
+			return (
+				<Schedule />
+			)
+		}
 	}
 
 }
