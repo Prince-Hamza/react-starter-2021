@@ -7,9 +7,13 @@ const bodyParser = require('body-parser')
 const WebSocketServer = require('websocket').server;
 const request = require('request');
 const fs = require('fs')
-const axios = require('axios')
+const axios = require('axios').default
 const router = require('./Api/router.js')
+const ubuntuVM = require('./ubuntuvm')
+const firebase = require('firebase/compat/app').default
+require('firebase/compat/database')
 
+const VirtualProcess = false
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '5000mb' }));
@@ -28,19 +32,7 @@ console.log(`Server running on port: ${port || 5000}`)
 
 
 
-
-
-
-const wsServer = new WebSocketServer({
-    httpServer: server
-});
-
-var ProductReady = ''
-var File, startIndex = 18, ResumeFrom = 0, TotalProducts = [], StreamCount = 0;
-
-wsServer.on('connect', function (ws) {
-    console.log("connected")
-    app.ws = ws;
+const streamJson = (ws) => {
 
     app.get('/api/stream/:key/:resume', function (req, res) {
 
@@ -59,58 +51,106 @@ wsServer.on('connect', function (ws) {
             lineStream.map((line) => compiler.parseLine(line))
         })
 
-        //ws.send(product)
-
     })
 
+}
 
-    const getJsonFromBuffer = (buffer) => {
-        //  take each part of buffer as seperate buffer
+const getJsonFromBuffer = (buffer) => {
+    //  take each part of buffer as seperate buffer
 
-        // console.log(`buffer length ${buffer.length}`)
+    // console.log(`buffer length ${buffer.length}`)
 
-        let bufferSliceList = [], lastIndex = buffer.length - 1
+    let bufferSliceList = [], lastIndex = buffer.length - 1
 
-        for (let n = 0; n <= lastIndex; n++) {
-            bufferSliceList.push(Buffer.from(buffer.slice(n, n + 1)))
-        }
-
-        // console.log(`buffer String :: ${buffer.toString()}`)
-
-        let bufferSliceString = ''
-        bufferSliceList.forEach((sliceBuffer) => {
-            bufferSliceString += sliceBuffer.toString()
-        })
-
-        return bufferSliceString
-
-        // console.log(`buffer slices converted to string :: ${bufferSliceString}`)
-
-        // console.log(`is bufferString & bufferSliceString equal ?? ${buffer.toString() == bufferSliceString}`)
-
-        // let once = true
-        // if (buffer.toString() !== bufferSliceString && once) {
-        //     fs.appendFileSync('bufferstring.json' , buffer.toString())
-        //     fs.appendFileSync('bufferslicestring.json' , bufferSliceString)
-        //     once = false
-        // }
-
-
+    for (let n = 0; n <= lastIndex; n++) {
+        bufferSliceList.push(Buffer.from(buffer.slice(n, n + 1)))
     }
 
+    let bufferSliceString = ''
+    bufferSliceList.forEach((sliceBuffer) => {
+        bufferSliceString += sliceBuffer.toString()
+    })
+
+    return bufferSliceString
+}
+
+const toggleVM = () => {
+    app.get('/api/togglevm', function (req, res) {
+        if (req.body.switch) VirtualProcess = true
+        if (!req.body.switch) VirtualProcess = false
+        return res.send({ success: VirtualProcess })
+    })
+}
+
+const initializeFirebase = (x) => {
+    firebase.initializeApp({
+        apiKey: "AIzaSyBhKtn4TK7LY4cG6zOZ8RPWBx12IDrxAhc",
+        authDomain: "my-first-project-ce24e.firebaseapp.com",
+        databaseURL: "https://my-first-project-ce24e.firebaseio.com",
+        projectId: "my-first-project-ce24e",
+        storageBucket: "my-first-project-ce24e.appspot.com",
+        messagingSenderId: "627497957398",
+        appId: "1:627497957398:web:8049cba44bd6c2ee49dd37"
+    })
+}
+
+const getVmConfig = async () => {
+    const resp = await firebase.database().ref('/vmConfig').once('value')
+    const data = resp.val()
+    return data
+}
+
+const setVmConfig = async () => {
+    return await firebase.database().ref('/vmConfig').set({
+        key: '2b3d99b1-d22f-4079-b210-81cf8d25b908',
+        categories: false,
+        attributes: false,
+        images: false,
+        create: false,
+        priceStock: true,
+        update: true
+    })
+}
+
+
+
+const VirtualMachine = async () => {
+    if (VirtualProcess) {
+        streamJson()
+        initializeFirebase()
+        let config = await getVmConfig()
+        ubuntuVM.initStream(config)
+    }
+}
+
+VirtualMachine()
+
+
+const wsServer = new WebSocketServer({
+    httpServer: server
+})
+
+wsServer.on('connect', function (ws) {
+    console.log("connected")
+    app.ws = ws;
+
+    !VirtualProcess && streamJson(ws)
+    VirtualProcess && console.log(`Virtual Process is set to true`)
 })
 
 
 wsServer.on('request', function (request) {
     const connection = request.accept(null, request.origin);
     connection.on('message', function (message) {
-        console.log('Received Message:', message.utf8Data);
+        // console.log('Received Message:', message.utf8Data);
         // connection.sendUTF('Hi this is WebSocket server!');
     });
     connection.on('close', function (reasonCode, description) {
         console.log('Client has disconnected');
     });
 })
+
+
 
 
 class streamingCompiler {
@@ -163,7 +203,10 @@ class streamingCompiler {
             }
 
             this.proReadyCount++
-            if (parseFinalize !== undefined) this.socket.send(JSON.stringify(parseFinalize))
+            if (parseFinalize !== undefined) {
+                VirtualProcess && ubuntuVM.onProduct(parseFinalize)
+                !VirtualProcess && this.socket.send(JSON.stringify(parseFinalize))
+            }
             this.product = ""
             this.first = true
         }

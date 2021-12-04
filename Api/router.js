@@ -11,7 +11,7 @@ const ApiGolang = async (req, res) => {
     const simpleJsonProducts = simplieItScopeJson(info)
 
     console.log(`sending request`)
-    // console.log(JSON.stringify(simpleJsonProducts))
+    simpleJsonProducts.products[0].sku = 'J9780A'
 
     var config = {
         method: 'POST',
@@ -23,16 +23,13 @@ const ApiGolang = async (req, res) => {
         data: JSON.stringify(simpleJsonProducts)
     }
 
-
+    
     await axios(config)
         .then((response) => {
-            console.log(JSON.stringify(response.data))
-            if (!response.data.hasOwnProperty('update')) {
-                console.log("Products Updated")
-                productsUpdated = response.data.length
-                console.log("update : " + productsUpdated)
-            }
-            return res.send({ updateLength: response.data.length, data: response.data })
+            console.log(response.data)
+            let update = 0
+            if (!response.data.hasOwnProperty('update')) update += 2
+            return res.send({ updateLength: update, data: response.data })
         })
         .catch((error) => {
             console.log(error)
@@ -63,21 +60,6 @@ const simplieItScopeJson = (jsonBody) => {
 
 }
 
-// const changeTypes = (jsonBody) => {
-
-//     jsonBody.products.forEach((pro) => {
-
-//         pro.supplierStockInfo.stock = pro.supplierStockInfo.stock.toString()
-//         pro.supplierStockInfo.stockStatusText = pro.productSubType.toString()
-//         pro.supplierPriceInfo.price = pro.productSubType.toString()
-//         pro.productSubType = pro.productSubType.toString()
-//         pro.standardHtmlDatasheet = pro.standardHtmlDatasheet.toString()
-//         pro.aggregatedStockStatusText = pro.aggregatedStatusText.toString()
-
-//     })
-
-//     return jsonBody
-// }
 
 
 

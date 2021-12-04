@@ -154,10 +154,10 @@ export default class PriceStock extends Component {
 			data: jsonBody
 		};
 
-
+		var resp
 		await axios(config)
 			.then(function (response) {
-				console.log(JSON.stringify(response.data));
+				resp = response.data
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -179,30 +179,17 @@ export default class PriceStock extends Component {
 
 	refineStockPrices = (Products) => {
 		Products.map((product) => {
-			if (product.hasOwnProperty('productPriceInfo') == false || product.hasOwnProperty('supplierPriceInfo') == false) {
+			if (!product.hasOwnProperty('supplierPriceInfo')) {
 				product.supplierPriceInfo = { price: 0 }
 			}
-			if (product.hasOwnProperty('productStockInfo') == false || product.hasOwnProperty('supplierStockInfo') == false || product.hasOwnProperty("aggregatedStock") == false) {
-				product.supplierStockInfo = { stock: 0 }
-			}
-
-			if (product.hasOwnProperty('productStockInfo') == false || product.hasOwnProperty('supplierStockInfo') == false || product.hasOwnProperty("aggregatedStockStatusText") == false) {
+			if (!product.hasOwnProperty('supplierStockInfo')) {
+				product.supplierPriceInfo = { price: 0 }
 				product.supplierStockInfo = { stock: 0, stockStatusText: "Not Available" }
-			}
-
-			if (product.hasOwnProperty('aggregatedStockStatusText' == false)) {
-				product.aggregatedStockStatusText = product.supplierStockInfo.stockStatusText
-			}
-
-			if (product.hasOwnProperty('standardHtmlDatasheet') == false) {
-				product.standardHtmlDatasheet = "abc"
 			}
 
 			product.fields_in_response = ['id', 'sku', 'stock']
 			product.type = 'simple'
 		})
-
-
 
 		return Products
 	}
