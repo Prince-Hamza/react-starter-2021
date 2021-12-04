@@ -13,7 +13,7 @@ const ubuntuVM = require('./ubuntuvm')
 const firebase = require('firebase/compat/app').default
 require('firebase/compat/database')
 
-const VirtualProcess = false
+const VirtualProcess = true
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '5000mb' }));

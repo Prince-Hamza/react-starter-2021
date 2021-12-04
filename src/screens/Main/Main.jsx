@@ -278,6 +278,7 @@ export default class PriceStock extends Component {
 		var firewallRadioValue = (site == 'fire') ? true : false
 		var denmarkRadioValue = (site == 'den') ? true : false
 		this.state.FormInfo.Site = (site == 'fire') ? 'https://firewallforce.se' : 'denmark'
+
 		this.setState({
 			FormInfo: this.state.FormInfo,
 			firewallRadio: firewallRadioValue,
@@ -290,14 +291,12 @@ export default class PriceStock extends Component {
 		this.setState({ FormInfo: this.state.FormInfo })
 	}
 
-	devieSelect = () => {
-		
+	deviceSelect = () => {
+       this.setState({Interface : 'Local'})
 	}
 
 	render() {
 		if (this.state.Interface == 'Local') {
-
-
 
 			return (
 				<div style={Styles.Theme} >
@@ -335,7 +334,7 @@ export default class PriceStock extends Component {
 			)
 		} else if (this.state.Interface == 'Schedule') {
 			return (
-				<Schedule />
+				<Schedule selectDevice={this.deviceSelect} />
 			)
 		}
 	}

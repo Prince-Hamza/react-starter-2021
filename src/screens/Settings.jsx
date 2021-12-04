@@ -14,36 +14,26 @@ export default class Settings extends Component {
         this.state = {
             ParallelPros: 10,
             ResumeFrom: 0,
-            SendPro: [],
-            HoldPro: [],
-            HoldCount: -1,
-            counter: 0,
-            Pause: false,
-            SequenceCount: 0,
-            catCount: 0,
-            exportKey: "",
-            NextSequence: true,
-            Once: 1,
-            ImagesUploaded: 0,
-            ImageLinx: [],
-            SeqFinish: '',
-            Categories: [],
-            FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: false, Images: false, Attributes: false },
-            firewallRadio: true,
-            denmarkRadio: false,
-            Updated: 0,
-            concurrency: 2,
-            Interface: 'Schedule'
+            FormInfo: { Site: 'https://firewallforce.se', priceStock: false, Categories: false, Images: false, Attributes: false },
+            seRadio: false,
+            dkRadio: false,
+            pkRadio: false
         }
     }
 
-    setCloud = (input) => {
-        this.setState({ cloud: true, local: false })
+
+    radioChange = (input) => {
+        this.state.FormInfo.Site = `https://firewallforce.${input}`
+        this.setState({
+            FormInfo: this.state.FormInfo,
+            [`${input}Radio`]: true,
+        })
     }
 
 
-    setLocal = (input) => {
-        this.setState({ cloud: false, local: true })
+    setValue = (param) => {
+        this.state.FormInfo[param] = !this.state.FormInfo[param]
+        this.setState({ FormInfo: this.state.FormInfo })
     }
 
     render() {
@@ -51,17 +41,25 @@ export default class Settings extends Component {
             <div style={Styles.Theme} >
 
 
-                <div style={Styles.Form}>
+                <div style={{ ...Styles.Form, top: '90%', height: '100%' }} >
 
                     <div style={Styles.Card} >
-                        <input type="radio" style={Styles.Left} checked={this.state.firewallRadio} onChange={() => { this.radioChange('fire') }} />
-                        <p style={Styles.Right} > Firewallforce </p>
+                        <input type="radio" style={Styles.Left} checked={this.state.seRadio} onChange={() => { this.radioChange('se') }} />
+                        <p style={Styles.Right} > Firewallforce.se </p>
                     </div>
 
+
                     <div style={Styles.Card} >
-                        <input type="radio" style={Styles.Left} checked={this.state.denmarkRadio} onChange={() => { this.radioChange('den') }} />
-                        <p style={Styles.Right} > Denmark.com </p>
+                        <input type="radio" style={Styles.Left} checked={this.state.dkRadio} onChange={() => { this.radioChange('dk') }} />
+                        <p style={Styles.Right} > Firewallforce.dk </p>
                     </div>
+
+
+                    <div style={Styles.Card} >
+                        <input type="radio" style={Styles.Left} checked={this.state.pkRadio} onChange={() => { this.radioChange('pk') }} />
+                        <p style={Styles.Right} > Firewallforce.pk </p>
+                    </div>
+
 
 
                     <div style={Styles.Card} >
@@ -90,6 +88,11 @@ export default class Settings extends Component {
                         <input type='number' style={{ ...Styles.ResumeInput }} value={this.state.ResumeFrom} onChange={(e) => { this.handleResume(e) }} />
                     </div>
                 </div>
+
+
+                <button style={{ ...Styles.Button, ...Cards.Continue, top: '195%' }} onClick={() => { alert(JSON.stringify(this.state.FormInfo)) }} >
+                    Schedule
+                </button>
             </div>
         )
     }

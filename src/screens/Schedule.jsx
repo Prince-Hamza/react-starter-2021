@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import Settings from "./Settings";
 import axios from "axios";
 import { initializeApp } from '@firebase/app'
 import { Styles } from '../styles/Styles'
@@ -7,19 +8,22 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 
 
-export default class Settings extends Component {
+export default class Schedule extends Component {
 
-    constructor() {
+    constructor(props) {
         super()
         this.state = {
             ResumeFrom: 0,
             cloud: true,
             local: false,
+            showSettings: false,
+            chooseDevice: true,
+            Calendar: false
         }
     }
 
     setCloud = (input) => {
-        this.setState({ cloud: true, local: false })
+        this.setState({ cloud: true, local: false, calendar: true })
     }
 
 
@@ -27,28 +31,57 @@ export default class Settings extends Component {
         this.setState({ cloud: false, local: true })
     }
 
+    onContinue = (input) => {
+        this.state.cloud && this.setState({ showSettings: true, chooseDevice: false, Calendar: true })
+        this.state.local && this.props.selectDevice()
+    }
+
+    onSchedule = () => {
+
+    }
+
     render() {
         return (
             <div style={Styles.Theme} >
 
-                <div style={{ ...Styles.Form, ...Cards.Main }}>
-                    <div style={{ ...Styles.Card, height: '100%' }} >
-                        <input type="radio" style={Styles.Left} checked={this.state.cloud} onChange={() => { this.setCloud() }} />
-                        <p style={Styles.Right} > Cloud Device </p>
+
+                {this.state.chooseDevice && !this.state.Calendar &&
+                    <div>
+                        <div style={{ ...Styles.Form, ...Cards.Main }}>
+                            <div style={{ ...Styles.Card, height: '100%' }} >
+                                <input type="radio" style={Styles.Left} checked={this.state.cloud} onChange={() => { this.setCloud() }} />
+                                <p style={Styles.Right} > Cloud Device </p>
+                            </div>
+                        </div>
+
+                        <div style={{ ...Styles.Form, ...Cards.Main, top: '40%' }}>
+                            <div style={{ ...Styles.Card, height: '100%' }} >
+                                <input type="radio" style={Styles.Left} checked={this.state.local} onChange={() => { this.setLocal() }} />
+                                <p style={Styles.Right} > Local Device </p>
+                            </div>
+                        </div>
+
+                        <button style={{ ...Styles.Button, ...Cards.Continue }} onClick={() => { this.onContinue() }} >
+                            Continue
+                        </button>
+
                     </div>
-                </div>
+                }
 
-                <div style={{ ...Styles.Form, ...Cards.Main, top: '40%' }}>
-                    <div style={{ ...Styles.Card, height: '100%' }} >
-                        <input type="radio" style={Styles.Left} checked={this.state.local} onChange={() => { this.setLocal() }} />
-                        <p style={Styles.Right} > Local Device </p>
+                {this.state.Calendar &&
+                    <div>
+                        calendar
                     </div>
-                </div>
+                }
+
+                {this.state.showSettings &&
+                    <div>
+                        <Settings />
+
+                    </div>
+                }
 
 
-                <button style={{ ...Styles.Button, ...Cards.Continue }} onClick={() => { this.props.deviceSelect() }} >
-                    Continue
-                </button>
 
             </div>
         )
