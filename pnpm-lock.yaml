@@ -2,15 +2,21 @@ lockfileVersion: 5.3
 
 specifiers:
   '@firebase/app': ^0.7.9
+  '@fullcalendar/daygrid': ^5.10.1
+  '@fullcalendar/interaction': ^5.10.1
+  '@fullcalendar/react': ^5.10.1
+  '@fullcalendar/timegrid': ^5.10.1
   '@testing-library/jest-dom': ^5.11.4
   '@testing-library/react': ^11.1.0
   '@testing-library/user-event': ^12.1.10
   axios: ^0.24.0
   body-parser: ^1.19.0
+  child_process: ^1.0.2
   cors: ^2.8.5
   dotenv: ^10.0.0
   express: ^4.17.1
   firebase: ^9.5.0
+  jquery: ^3.6.0
   nodemon: ^2.0.15
   react: ^17.0.2
   react-dom: ^17.0.2
@@ -22,15 +28,21 @@ specifiers:
 
 dependencies:
   '@firebase/app': 0.7.9
+  '@fullcalendar/daygrid': 5.10.1
+  '@fullcalendar/interaction': 5.10.1
+  '@fullcalendar/react': 5.10.1_react-dom@17.0.2+react@17.0.2
+  '@fullcalendar/timegrid': 5.10.1
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 11.2.7_react-dom@17.0.2+react@17.0.2
   '@testing-library/user-event': 12.8.3
   axios: 0.24.0
   body-parser: 1.19.0
+  child_process: 1.0.2
   cors: 2.8.5
   dotenv: 10.0.0
   express: 4.17.1
   firebase: 9.5.0
+  jquery: 3.6.0
   nodemon: 2.0.15
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -1998,6 +2010,46 @@ packages:
 
   /@firebase/webchannel-wrapper/0.6.1:
     resolution: {integrity: sha512-9FqhNjKQWpQ3fGnSOCovHOm+yhhiorKEqYLAfd525jWavunDJcx8rOW6i6ozAh+FbwcYMkL7b+3j4UR/30MpoQ==}
+    dev: false
+
+  /@fullcalendar/common/5.10.1:
+    resolution: {integrity: sha512-EumKIJcQTvQdTs75/9dmeREFgjcRVWzqHJS1Xvlz5mNsmB+w9EINCHETRjChtAQg1WD/lTQyVj4sHsKO7vCMSw==}
+    dependencies:
+      tslib: 2.3.1
+    dev: false
+
+  /@fullcalendar/daygrid/5.10.1:
+    resolution: {integrity: sha512-sfUMP+rew0krsBffgNcWWKhBCiyytGfRKZJoc64E8ohX7VWjPcPZuB1xgO5U4wPLmNkT0rZiHoGeQGTXw1+ZKg==}
+    dependencies:
+      '@fullcalendar/common': 5.10.1
+      tslib: 2.3.1
+    dev: false
+
+  /@fullcalendar/interaction/5.10.1:
+    resolution: {integrity: sha512-H1g1QeXg7yXtUcKmVtfg7uzm5R5ElFTvYniiXU+8kJda69IDg7Lee+Y7UDv5dvLb5/HxO86RhPVxRtcOQ8XdXw==}
+    dependencies:
+      '@fullcalendar/common': 5.10.1
+      tslib: 2.3.1
+    dev: false
+
+  /@fullcalendar/react/5.10.1_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-+kV5+o9qGjkoO5j0r3oawhig+hP3inE68bHKBl6dtGQ8mi3GkEGsTL12MY2n5N0hXon6+2psIQLnAjMyRYZbmg==}
+    peerDependencies:
+      react: ^16.7.0 || ^17
+      react-dom: ^16.7.0 || ^17
+    dependencies:
+      '@fullcalendar/common': 5.10.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      tslib: 2.3.1
+    dev: false
+
+  /@fullcalendar/timegrid/5.10.1:
+    resolution: {integrity: sha512-0O0m+JzFBlg8gxYr/rIjZViRlbndCtjZlDjjIylQHFBeWC32e3cpHEavKGbTIBLN8SDilUYAJnE21abSqC2G/w==}
+    dependencies:
+      '@fullcalendar/common': 5.10.1
+      '@fullcalendar/daygrid': 5.10.1
+      tslib: 2.3.1
     dev: false
 
   /@gar/promisify/1.1.2:
@@ -4214,6 +4266,10 @@ packages:
 
   /check-types/11.1.2:
     resolution: {integrity: sha512-tzWzvgePgLORb9/3a0YenggReLKAIb2owL03H2Xdoe5pKcUyWRSEQ8xfCar8t2SIAuEDwtmx2da1YB52YuHQMQ==}
+    dev: false
+
+  /child_process/1.0.2:
+    resolution: {integrity: sha1-sffn/HPSXn/R1FWtyU4UODAYK1o=}
     dev: false
 
   /chokidar/2.1.8:
@@ -8044,6 +8100,10 @@ packages:
       - supports-color
       - ts-node
       - utf-8-validate
+    dev: false
+
+  /jquery/3.6.0:
+    resolution: {integrity: sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==}
     dev: false
 
   /js-tokens/4.0.0:

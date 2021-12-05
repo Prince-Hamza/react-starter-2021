@@ -13,7 +13,7 @@ const ubuntuVM = require('./ubuntuvm')
 const firebase = require('firebase/compat/app').default
 require('firebase/compat/database')
 
-const VirtualProcess = true
+const VirtualProcess = false
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '5000mb' }));
@@ -84,13 +84,13 @@ const toggleVM = () => {
 
 const initializeFirebase = (x) => {
     firebase.initializeApp({
-        apiKey: "AIzaSyBhKtn4TK7LY4cG6zOZ8RPWBx12IDrxAhc",
-        authDomain: "my-first-project-ce24e.firebaseapp.com",
-        databaseURL: "https://my-first-project-ce24e.firebaseio.com",
-        projectId: "my-first-project-ce24e",
-        storageBucket: "my-first-project-ce24e.appspot.com",
-        messagingSenderId: "627497957398",
-        appId: "1:627497957398:web:8049cba44bd6c2ee49dd37"
+        apiKey: "AIzaSyCnD-xueHVA0gwNjBLUu5hlB8x8jhMMgOw",
+        authDomain: "kidland-5754b.firebaseapp.com",
+        databaseURL: "https://kidland-5754b-default-rtdb.firebaseio.com",
+        projectId: "kidland-5754b",
+        storageBucket: "kidland-5754b.appspot.com",
+        messagingSenderId: "291891653552",
+        appId: "1:291891653552:web:013a263ba778e7f60ac475"
     })
 }
 
@@ -103,15 +103,16 @@ const getVmConfig = async () => {
 const setVmConfig = async () => {
     return await firebase.database().ref('/vmConfig').set({
         key: '2b3d99b1-d22f-4079-b210-81cf8d25b908',
+        priceStock: true,
+        titles: true,
+        descriptions: true,
         categories: false,
         attributes: false,
         images: false,
+        update: true,
         create: false,
-        priceStock: true,
-        update: true
     })
 }
-
 
 
 const VirtualMachine = async () => {

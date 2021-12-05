@@ -2,6 +2,7 @@
 const express = require('express')
 const axios = require("axios")
 const router = express.Router()
+// const exec = require('child_process').execSync
 
 const ApiGolang = async (req, res) => {
 
@@ -11,7 +12,6 @@ const ApiGolang = async (req, res) => {
     const simpleJsonProducts = simplieItScopeJson(info)
 
     console.log(`sending request`)
-    simpleJsonProducts.products[0].sku = 'J9780A'
 
     var config = {
         method: 'POST',
@@ -23,7 +23,7 @@ const ApiGolang = async (req, res) => {
         data: JSON.stringify(simpleJsonProducts)
     }
 
-    
+
     await axios(config)
         .then((response) => {
             console.log(response.data)
@@ -60,10 +60,26 @@ const simplieItScopeJson = (jsonBody) => {
 
 }
 
+const startVm = (req, res) => {
+
+    console.log("vm request start")
+    const execSync = require('child_process').execSync;
+    const output = execSync(req.body.command)
+    console.log('Output was:\n', output)
+    res.send(output)
+
+
+    // gcloud auth application-default login --project my-first-project-ce24e
+    // gcloud auth login 
+    // gcloud config set project projectId
+
+}
+
 
 
 
 router.post('/golangserver', ApiGolang)
+router.post('/vmstart', startVm)
 
 module.exports = router
 

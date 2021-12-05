@@ -1,12 +1,8 @@
 
 import React, { Component } from "react";
 import Settings from "./Settings";
-import axios from "axios";
-import { initializeApp } from '@firebase/app'
 import { Styles } from '../styles/Styles'
-import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
-
 
 export default class Schedule extends Component {
 
@@ -18,7 +14,8 @@ export default class Schedule extends Component {
             local: false,
             showSettings: false,
             chooseDevice: true,
-            Calendar: false
+            Calendar: false,
+            formTop: 15,
         }
     }
 
@@ -34,10 +31,6 @@ export default class Schedule extends Component {
     onContinue = (input) => {
         this.state.cloud && this.setState({ showSettings: true, chooseDevice: false, Calendar: true })
         this.state.local && this.props.selectDevice()
-    }
-
-    onSchedule = () => {
-
     }
 
     render() {
@@ -68,16 +61,9 @@ export default class Schedule extends Component {
                     </div>
                 }
 
-                {this.state.Calendar &&
-                    <div>
-                        calendar
-                    </div>
-                }
-
                 {this.state.showSettings &&
                     <div>
-                        <Settings />
-
+                        <Settings formTop={this.state.formTop} />
                     </div>
                 }
 
