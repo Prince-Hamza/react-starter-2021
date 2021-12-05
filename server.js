@@ -10,10 +10,11 @@ const fs = require('fs')
 const axios = require('axios').default
 const router = require('./Api/router.js')
 const ubuntuVM = require('./ubuntuvm')
+const invites = require('./Invites')
 const firebase = require('firebase/compat/app').default
 require('firebase/compat/database')
 
-const VirtualProcess = false
+const VirtualProcess = true
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '5000mb' }));
@@ -114,9 +115,14 @@ const setVmConfig = async () => {
     })
 }
 
+const emailNotification = () => {
+    invites.sendEmail('princehamzi.mine@gmail.com', "Project Started on Ubuntu VM", "Google Virtual Machine")
+}
+
 
 const VirtualMachine = async () => {
     if (VirtualProcess) {
+        //emailNotification()
         streamJson()
         initializeFirebase()
         let config = await getVmConfig()
