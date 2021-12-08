@@ -6,16 +6,16 @@ class Stock {
         const stockQuantity = this.getStockQuantity(Product)
         const stockStatus = this.getStockStatus(Product)
         const itScopeStatus = this.getItScopeStockStatus(Product)
-        return ({ stockQuantity: stockQuantity, wpStockStatus: stockStatus , itScopeStockStaus: itScopeStatus })
+        return ({ stockQuantity: stockQuantity, wpStockStatus: stockStatus, itScopeStockStaus: itScopeStatus })
     }
 
     getStockQuantity(Product) {
         var stockQuantity = undefined
         if (Product.hasOwnProperty('supplierStockInfo')) stockQuantity = Product.supplierStockInfo.stock
-        if (Product.hasOwnProperty("productStockInfo"))  stockQuantity = Product.productStockInfo.stock
+        if (Product.hasOwnProperty("productStockInfo")) stockQuantity = Product.productStockInfo.stock
         if (!stockQuantity) stockQuantity = Product.aggregatedStockStatus
         if (!stockQuantity) stockQuantity = 0
-                
+
         return stockQuantity
     }
 
@@ -40,15 +40,17 @@ class Stock {
         return stockStatus
     }
 
-    getItScopeStockStatus (Product) {
+    getItScopeStockStatus(Product) {
         var itScopeStatus = "unknown"
-        if (Product.hasOwnProperty('supplierStockInfo')) itScopeStatus= Product.supplierStockInfo.stockStatusText
-        if (Product.hasOwnProperty('productStockInfo')) itScopeStatus= Product.productStockInfo.stockStatusText
+        if (Product.hasOwnProperty('supplierStockInfo')) itScopeStatus = Product.supplierStockInfo.stockStatusText
+        if (Product.hasOwnProperty('productStockInfo')) itScopeStatus = Product.productStockInfo.stockStatusText
 
         return itScopeStatus
     }
 
 }
 
-exports.Stock = new Stock()
-
+const stockInfo = new Stock()
+module.exports = {
+    stockInfo
+}

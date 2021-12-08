@@ -6,7 +6,6 @@ const GolangApiSet = require("./Golang")
 const UbuntuApiSet = require("./UbuntuVm")
 
 
-
 router.post('/golangserver', GolangApiSet.ApiGolang)
 router.post('/vmstart', UbuntuApiSet.StartVm)
 

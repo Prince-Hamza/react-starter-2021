@@ -16,7 +16,7 @@ export default class Settings extends Component {
         this.state = {
             ParallelPros: 10,
             ResumeFrom: 0,
-            FormInfo: { key: '', Site: 'https://firewallforce.se', title: false, description: false, priceStock: false, Categories: false, Images: false, Attributes: false },
+            FormInfo: { create: false, update: false, key: '', Site: 'https://firewallforce.se', title: false, description: false, priceStock: false, Categories: false, Images: false, Attributes: false },
             seRadio: false,
             dkRadio: false,
             pkRadio: false,
@@ -39,6 +39,7 @@ export default class Settings extends Component {
     setValue = (param) => {
         this.state.FormInfo[param] = !this.state.FormInfo[param]
         this.setState({ FormInfo: this.state.FormInfo })
+        this.props.Main && this.props.onFormUpdate(this.state.FormInfo)
     }
 
 
@@ -102,10 +103,14 @@ export default class Settings extends Component {
                 }
 
                 <div style={{ zIndex: 0 }} >
-                    <div style={Cards.keyStyle} >
-                        <p style={Styles.Right} > key </p>
-                        <input type="text" style={Styles.Left} onChange={(e) => { this.setExportKey(e.target.value) }} />
-                    </div>
+
+                    {!this.props.Main &&
+                        <div style={{ ...Cards.keyStyle }} >
+                            <p style={Styles.Right} > key </p>
+                            <input type="text" style={Styles.Left} onChange={(e) => { this.setExportKey(e.target.value) }} />
+                        </div>
+                    }
+
 
                     <div style={{ ...Styles.Form, top: this.props.formTop + '%', height: '115%', width: '40%' }} >
 
@@ -124,6 +129,18 @@ export default class Settings extends Component {
                         <div style={Styles.Card} >
                             <input type="radio" style={Styles.Left} checked={this.state.pkRadio} onChange={() => { this.radioChange('pk') }} />
                             <p style={Styles.Right} > Firewallforce.pk </p>
+                        </div>
+
+
+                        <div style={Styles.Card} >
+                            <input type="checkbox" checked={this.state.FormInfo.create} style={Styles.Left} onChange={() => { this.setValue('create') }} />
+                            <p style={Styles.Right}> Create </p>
+                        </div>
+
+
+                        <div style={Styles.Card} >
+                            <input type="checkbox" checked={this.state.FormInfo.update} style={Styles.Left} onChange={() => { this.setValue('update') }} />
+                            <p style={Styles.Right}> Update </p>
                         </div>
 
 
@@ -166,9 +183,12 @@ export default class Settings extends Component {
                     </div>
                 </div>
 
-                <button style={{ ...Styles.Button, ...Cards.Continue, top: this.props.formTop + 120 + '%' }} onClick={() => { this.onSchedule() }} >
-                    Schedule
-                </button>
+                {!this.props.Main &&
+                    <button style={{ ...Styles.Button, ...Cards.Continue, top: this.props.formTop + 120 + '%' }} onClick={() => { this.onSchedule() }} >
+                        Schedule
+                    </button>
+                }
+
             </div>
         )
     }

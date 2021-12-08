@@ -63,7 +63,7 @@ export default class Schedule extends Component {
 
                 {this.state.showSettings &&
                     <div>
-                        <Settings formTop={this.state.formTop} />
+                        <Settings formTop={this.state.formTop} Main={false} />
                     </div>
                 }
 

@@ -1,12 +1,17 @@
-const firebase = require('firebase/app').default
+const config = require('./config')
 const fetch = require('node-fetch')
-require("firebase/database");
+const firebase = require('firebase/compat/app').default
+require("firebase/compat/database");
 
 class Prices {
 
-    async getFinalPrice(Product) {
+    getFinalPrice = async (Product) => {
+
+
+        try { firebase.initializeApp(config) } catch (ex) { }
+
         const inputPrice = this.selectInput(Product)
-        // console.log(`inputPrice :: ${inputPrice}`)
+        console.log(`inputPrice :: ${inputPrice}`)
         var price = await this.currencyExchange(inputPrice)
         // console.log(`Final Price :: ${price}`)
         var intPrice = parseFloat(price)
@@ -22,19 +27,20 @@ class Prices {
         return Price
     }
 
-    async currencyExchange(Eur) {
-        var FireData = await this.Once('/CurrencyApi')
+    currencyExchange = async (Eur) => {
+
+        const FireData = await firebase.database().ref('/CurrencyApi').once('value')
         var Fireval = FireData.val()
         // console.log(`Firebase currency Api Reponse :: ${Fireval} `)
 
         var nowDate = new Date();
         var date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate();
-        console.log(`now Date :: ${date}`)
-        console.log(`fireval Date :: ${Fireval.Date}`)
+        // console.log(`now Date :: ${date}`)
+        // console.log(`fireval Date :: ${Fireval.Date}`)
 
         var Method = (date === Fireval.Date) ? this.priceByFire : this.useCurrencyResp
         var Final = await Method(Fireval.Info, Eur)
-        // console.log(Final)
+        console.log(Final)
         return Final
     }
 
@@ -71,21 +77,33 @@ class Prices {
         })
 
         var EurInApi = cinf.rates.EUR;
-
         var intEur = EurInApi + 0;
-        
         var cnvbase = 1 / intEur; // Eur * by cnvbase = usd value 
         var USdollar = Eur * cnvbase;
         var SEK = cinf.rates.SEK;
         var Krona = USdollar * SEK;
         return Krona.toString()
+
     }
 
     async Once(Ref) {
-        const info = await firebase.database().ref(Ref).once('value')
-        return info
+        console.group('once r fire')
+        try {
+            const info = await firebase.database().ref(Ref).once('value')
+            console.log(`fireback : ${info}`)
+            return info
+
+        } catch (ex) {
+             console.log(`firerror : ${ex}`)
+        }
+
+
+
     }
+
 
 }
 
-exports.Price = new Prices()
+const priceInfo = new Prices()
+
+module.exports = priceInfo

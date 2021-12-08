@@ -14,7 +14,7 @@ const invites = require('./Invites')
 const firebase = require('firebase/compat/app').default
 require('firebase/compat/database')
 
-const VirtualProcess = true
+const VirtualProcess = false
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '5000mb' }));
@@ -24,6 +24,7 @@ app.use(bodyParser.json({ limit: '500mb' }))
 
 app.use('/', express.static(__dirname + '/build'))
 app.use('/api', router)
+app.get('/vprocessoff', (req, res) => { VirtualProcess = false; return res.send('ok') })
 
 
 const port = process.env.PORT;

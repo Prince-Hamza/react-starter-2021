@@ -1,24 +1,66 @@
+const PriceSet = require('./Prices')
+const StockSet = require('./Stock')
+const axios = require('axios')
+const getCategoryIdByName = require('./Categories')
+const getAttributes = require('./Attributes')
+
+
+
+
+const bundleInfo = async (product, config) => {
+
+    console.log(`Product : ${product}`)
+
+    let price = await PriceSet.getFinalPrice(product)
+    let categoryId = await getCategoryIdByName(product.productSubType)
+    let stock = StockSet.stockInfo.prepareStock(product).stockQuantity
+
+    console.log(`categoryId :  ${categoryId}`)
+    console.log(`price : ${price}`)
+    console.log(`stock : ${price}`)
+
+    var simple = ({
+        sku: product.manufacturerSKU.toString(),
+        price: price.toString(),
+        stock: stock.toString(),
+        stockStatus: StockSet.stockInfo.prepareStock(product).stockQuantity.toString(),
+        categories: [{ id: parseInt(categoryId) }]
+    })
+
+    if (config.categories) simple.categories = [{ id: categoryId }]
+    if (config.images) simple.images = [{ id: 0 }]
+    if (config.attributes) simple.attributes = getAttributes(product)
+
+    console.log("returning ...")
+    return ({ success: 'ok' })
+
+}
+
+
 const ApiGolang = async (req, res) => {
 
     console.log("request recieved from React")
 
-    var info = req.body, productsUpdated = 0
+    var productsArray = req.body.products, config = req.body.config
 
-    const parsedInfo = bundleInfo(info.products)
-    const simpleJsonProducts = simplieItScopeJson(info)
+    var requests = productsArray.map((product) => {
+        console.log("bundle Information")
+        return bundleInfo(product, config)
+    })
 
-    console.log(`sending request`)
+    var products = await Promise.all(requests)
+    console.log(`final Products : ${products}`)
+
 
     var config = {
         method: 'POST',
-        url: 'https://us-central1-my-first-project-ce24e.cloudfunctions.net/ITScopePro',
-        //url: 'http://localhost:8080',
+        //url: 'https://us-central1-my-first-project-ce24e.cloudfunctions.net/ITScopePro',
+        url: 'http://localhost:8080',
         headers: {
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(simpleJsonProducts)
+        data: JSON.stringify({ products: products })
     }
-
 
     await axios(config)
         .then((response) => {
@@ -31,31 +73,6 @@ const ApiGolang = async (req, res) => {
             console.log(error)
             return res.send({ Error: error })
         })
-}
-
-const bundleInfo = (productsArray) => {
-    
-}
-
-
-const simplieItScopeJson = (jsonBody) => {
-
-    var simpleProductsArray = []
-
-    jsonBody.products.forEach((product) => {
-        var simple = ({
-            sku: product.manufacturerSKU.toString(),
-            price: product.supplierPriceInfo.price.toString(),
-            stock: product.supplierStockInfo.stock.toString(),
-            stockStatus: product.supplierStockInfo.stockStatusText.toString(),
-            category: product.toString(),
-            standardHtmlDatasheet: product.standardHtmlDatasheet.toString()
-        })
-
-        simpleProductsArray.push(simple)
-    })
-
-    return ({ products: simpleProductsArray })
 
 }
 

@@ -7,6 +7,7 @@ import { Styles } from './Styles'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/storage'
 import { fs } from 'fs'
+import Settings from "../Settings";
 
 var ProductCount = 0;
 
@@ -60,6 +61,10 @@ export default class PriceStock extends Component {
 
 
 	onProduct = () => {
+		//this.state.FormInfo
+		this.state.FormInfo['key'] = this.state.exportKey
+		this.setState({ FormInfo: this.state.FormInfo })
+
 		const App = this;
 		const ws = new WebSocket('ws://localhost:5000/');
 		ws.onopen = function () {
@@ -143,7 +148,9 @@ export default class PriceStock extends Component {
 		console.log(`Pro Count :: ${Pro.length}`)
 		Pro = this.refineStockPrices(Pro)
 
-		var jsonBody = { products: Pro }
+		alert(JSON.stringify(this.state.FormInfo))
+
+		var jsonBody = { products: Pro, config: this.state.FormInfo }
 
 		var App = this;
 
@@ -292,7 +299,11 @@ export default class PriceStock extends Component {
 	}
 
 	deviceSelect = () => {
-       this.setState({Interface : 'Local'})
+		this.setState({ Interface: 'Local' })
+	}
+
+	handleFormUpdate = (FormInfo) => {
+		this.setState({ FormInfo: FormInfo })
 	}
 
 	render() {
@@ -321,6 +332,7 @@ export default class PriceStock extends Component {
 
 
 
+					<Settings formTop={60} Main={true} onFormUpdate={this.handleFormUpdate} />
 
 
 
