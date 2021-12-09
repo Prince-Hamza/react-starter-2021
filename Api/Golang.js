@@ -17,7 +17,6 @@ const bundleInfo = async (product, config) => {
     let stock = StockSet.stockInfo.prepareStock(product).stockQuantity
     console.log(`input images : ${product.images}`)
     // let images = await uploadImages2(product)
-    product.images = [{src:"anyurl"}]
 
     console.log(`price : ${price}`)
     console.log(`stock : ${price}`)
@@ -35,7 +34,10 @@ const bundleInfo = async (product, config) => {
         simple.categories = [{ id: parseInt(categoryId) }]
     }
 
-    if (config.Images) simple.images = [{ id: 0 }]
+    if (config.Images) {
+        let pix = await uploadImages2(product)
+        simple.images = pix
+    }
     if (config.Attributes) simple.attributes = getAttributes(product)
 
 

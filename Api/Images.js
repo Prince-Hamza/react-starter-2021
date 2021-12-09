@@ -28,7 +28,7 @@ const uploadImages2 = async (Product, method, id) => {
             // console.log(`Promise_All: Response :: ${response}`)
             response.forEach((imageInfo) => {
                 console.log(`Image Info : ${imageInfo}`)
-                NewImages.push(imageInfo.src)
+                NewImages.push({src: imageInfo.src})
                 filePathx.push(imageInfo.filePath)
             })
             Product.images = NewImages
@@ -52,7 +52,6 @@ const uploadImage = async (image) => {
     console.log('image 2 blob')
     const resp = await axios.get(image, { responseType: 'arraybuffer' })
     const buffer = Buffer.from(resp.data) 
-    console.log(`Buffer :: ${buffer}`)
 
     var storageRef = firebase.storage().ref('/WooPix')
     var random = getRandom(0, 99999999)
