@@ -7,7 +7,6 @@ const uploadImages2 = require('./Images')
 
 
 
-
 const bundleInfo = async (product, config) => {
 
     console.log(`Product : ${product}`)
@@ -16,7 +15,9 @@ const bundleInfo = async (product, config) => {
 
     let price = await PriceSet.getFinalPrice(product)
     let stock = StockSet.stockInfo.prepareStock(product).stockQuantity
-    uploadImages2(product) // images with firebase url
+    console.log(`input images : ${product.images}`)
+    // let images = await uploadImages2(product)
+    product.images = [{src:"anyurl"}]
 
     console.log(`price : ${price}`)
     console.log(`stock : ${price}`)
@@ -71,7 +72,7 @@ const ApiGolang = async (req, res) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify({ products: products })
+        data: JSON.stringify({ products: products, config: config })
     }
 
     await axios(config)

@@ -6,11 +6,13 @@ require("firebase/compat/storage");
 const uploadImages2 = async (Product, method, id) => {
 
     try { firebase.initializeApp(config) } catch (ex) { }
-    console.log(`Lets Upload Images First`)
+    console.log(`has images : ${Product.hasOwnProperty('images') && Product.images.length > 0}`)
 
-    if (!Product.images.length || Product.images.length == 0) {
+    if (!Product.hasOwnProperty('images') || !Product.images.length || Product.images.length == 0) {
         return
     }
+    console.log(`Image Uploading Start`)
+
 
     var NewImages = [], filePathx = []
 
@@ -20,14 +22,13 @@ const uploadImages2 = async (Product, method, id) => {
         return uploadImage(image)
     })
 
-    console.log(`Image Uploading Start`)
 
     await Promise.all(requests)
         .then((response) => {
             // console.log(`Promise_All: Response :: ${response}`)
             response.forEach((imageInfo) => {
+                console.log(`Image Info : ${imageInfo}`)
                 NewImages.push(imageInfo.src)
-                console.log(imageInfo.filePath)
                 filePathx.push(imageInfo.filePath)
             })
             Product.images = NewImages
@@ -40,8 +41,8 @@ const uploadImages2 = async (Product, method, id) => {
         })
 
 
-    const response = await Promise.all(requests)
-    response.map((image) => display(image))
+    // const response = await Promise.all(requests)
+    //response.map((image) => display(image))
 
 }
 
@@ -49,9 +50,9 @@ const uploadImage = async (image) => {
     try { firebase.initializeApp(config) } catch (ex) { }
 
     console.log('image 2 blob')
-    const Buffer = await axios.get(image , {responseType:'arraybuffer'})
-    // const blob = await resp.blob()
-    // const Buffer = await blob.arrayBuffer()
+    const resp = await axios.get(image, { responseType: 'arraybuffer' })
+    const buffer = Buffer.from(resp.data) 
+    console.log(`Buffer :: ${buffer}`)
 
     var storageRef = firebase.storage().ref('/WooPix')
     var random = getRandom(0, 99999999)
@@ -59,7 +60,7 @@ const uploadImage = async (image) => {
     var ref = storageRef.child(picPath)
     var metadata = { contentType: 'image/jpeg', public: true }
 
-    await ref.put(Buffer, metadata)
+    await ref.put(buffer, metadata)
     var downloadUrl = await ref.getDownloadURL()
     //console.log('Download Url :: ' + downloadUrl)
 
@@ -67,6 +68,12 @@ const uploadImage = async (image) => {
     return downloadUrl
 }
 
+
+
+
+const getRandom = (min, max) => {
+    return Math.trunc(Math.random() * (max - min) + min);
+}
 
 
 
