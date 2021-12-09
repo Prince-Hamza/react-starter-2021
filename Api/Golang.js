@@ -3,6 +3,7 @@ const StockSet = require('./Stock')
 const axios = require('axios')
 const getCategoryIdByName = require('./Categories')
 const getAttributes = require('./Attributes')
+const uploadImages2 = require('./Images')
 
 
 
@@ -10,12 +11,13 @@ const getAttributes = require('./Attributes')
 const bundleInfo = async (product, config) => {
 
     console.log(`Product : ${product}`)
+    console.log(`config : ${JSON.stringify(config)}`)
+
 
     let price = await PriceSet.getFinalPrice(product)
-    let categoryId = await getCategoryIdByName(product.productSubType)
     let stock = StockSet.stockInfo.prepareStock(product).stockQuantity
+    uploadImages2(product) // images with firebase url
 
-    console.log(`categoryId :  ${categoryId}`)
     console.log(`price : ${price}`)
     console.log(`stock : ${price}`)
 
@@ -24,15 +26,20 @@ const bundleInfo = async (product, config) => {
         price: price.toString(),
         stock: stock.toString(),
         stockStatus: StockSet.stockInfo.prepareStock(product).stockQuantity.toString(),
-        categories: [{ id: parseInt(categoryId) }]
     })
 
-    if (config.categories) simple.categories = [{ id: categoryId }]
-    if (config.images) simple.images = [{ id: 0 }]
-    if (config.attributes) simple.attributes = getAttributes(product)
+    if (config.Categories) {
+        let categoryId = await getCategoryIdByName(product.productSubType)
+        console.log(`categoryId :  ${categoryId}`)
+        simple.categories = [{ id: parseInt(categoryId) }]
+    }
+
+    if (config.Images) simple.images = [{ id: 0 }]
+    if (config.Attributes) simple.attributes = getAttributes(product)
+
 
     console.log("returning ...")
-    return ({ success: 'ok' })
+    return simple
 
 }
 
@@ -41,7 +48,9 @@ const ApiGolang = async (req, res) => {
 
     console.log("request recieved from React")
 
+
     var productsArray = req.body.products, config = req.body.config
+
 
     var requests = productsArray.map((product) => {
         console.log("bundle Information")
@@ -49,7 +58,10 @@ const ApiGolang = async (req, res) => {
     })
 
     var products = await Promise.all(requests)
-    console.log(`final Products : ${products}`)
+    console.log(`final Products : ${JSON.stringify(products)}`)
+    products[0].sku = "J9780A"
+    console.log(`product 0 : ${products[0]}`)
+
 
 
     var config = {

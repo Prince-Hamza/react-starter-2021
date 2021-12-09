@@ -36,7 +36,7 @@ export default class PriceStock extends Component {
 			ImageLinx: [],
 			SeqFinish: '',
 			Categories: [],
-			FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: false, Images: false, Attributes: false },
+			FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: false, Images: true, Attributes: true },
 			firewallRadio: true,
 			denmarkRadio: false,
 			Updated: 0,
@@ -140,15 +140,16 @@ export default class PriceStock extends Component {
 	}
 
 
-	// }
 
 	Fetch2 = async (Pro) => {
 
 		this.setState({ NextSequence: false })
 		console.log(`Pro Count :: ${Pro.length}`)
 		Pro = this.refineStockPrices(Pro)
+		this.ParseImages(Pro)
 
 		alert(JSON.stringify(this.state.FormInfo))
+
 
 		var jsonBody = { products: Pro, config: this.state.FormInfo }
 
@@ -182,6 +183,29 @@ export default class PriceStock extends Component {
 			SequenceCount: this.state.SequenceCount + this.state.concurrency,
 			NextSequence: true
 		})
+
+	}
+
+
+	ParseImages = (ProsArray) => {
+		ProsArray.forEach((Pro) => {
+
+			var Images = []
+			if (Pro.hasOwnProperty('mediaContents')) {
+				//console.log('has media contents')
+				Pro.mediaContents.forEach((object) => {
+					if (object.value.includes('img')) {
+						Images.push(object.value)
+					}
+				})
+				Pro.images = Images;
+				Images = []
+			}
+
+
+		})
+
+
 
 	}
 

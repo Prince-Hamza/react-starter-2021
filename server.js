@@ -187,6 +187,7 @@ class streamingCompiler {
 
 
     parseLine = (line) => {
+        // console.log(`line : ${line}`)
         //if (!this.stopline) {
         //  console.log('streaming Json')
         this.makeKeyVauePair(line)
