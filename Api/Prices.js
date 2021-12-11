@@ -94,7 +94,7 @@ class Prices {
             return info
 
         } catch (ex) {
-             console.log(`firerror : ${ex}`)
+            console.log(`firerror : ${ex}`)
         }
 
 

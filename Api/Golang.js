@@ -15,17 +15,15 @@ const bundleInfo = async (product, config) => {
 
     let price = await PriceSet.getFinalPrice(product)
     let stock = StockSet.stockInfo.prepareStock(product).stockQuantity
-    console.log(`input images : ${product.images}`)
-    // let images = await uploadImages2(product)
 
     console.log(`price : ${price}`)
-    console.log(`stock : ${price}`)
+    console.log(`stock : ${stock}`)
 
     var simple = ({
         sku: product.manufacturerSKU.toString(),
         price: price.toString(),
         stock: stock.toString(),
-        stockStatus: StockSet.stockInfo.prepareStock(product).stockQuantity.toString(),
+        stockStatus: StockSet.stockInfo.prepareStock(product).wpStockStatus.toString(),
     })
 
     if (config.Categories) {
@@ -35,12 +33,14 @@ const bundleInfo = async (product, config) => {
     }
 
     if (config.Images) {
-        let pix = await uploadImages2(product)
-        simple.images = pix
+        simple = await uploadImages2(product, simple)
+        console.log(`simple.images :: ${simple.images}`)
     }
+
     if (config.Attributes) simple.attributes = getAttributes(product)
 
 
+    console.log(`simple Json Product : ${JSON.stringify(simple)}`)
     console.log("returning ...")
     return simple
 
@@ -61,20 +61,17 @@ const ApiGolang = async (req, res) => {
     })
 
     var products = await Promise.all(requests)
+    
     console.log(`final Products : ${JSON.stringify(products)}`)
-    products[0].sku = "J9780A"
-    console.log(`product 0 : ${products[0]}`)
-
-
-
+    
     var config = {
         method: 'POST',
-        //url: 'https://us-central1-my-first-project-ce24e.cloudfunctions.net/ITScopePro',
-        url: 'http://localhost:8080',
+        //url: `https://us-central1-my-first-project-ce24e.cloudfunctions.net/ITScopePro?images=${config.Images}&attributes=${config.Attributes}&categories=${config.Categories}`,
+        url: `http://localhost:8080?images=${config.Images}&attributes=${config.Attributes}&categories=${config.Categories}`,
         headers: {
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify({ products: products, config: config })
+        data: JSON.stringify({ products: products })
     }
 
     await axios(config)
@@ -82,7 +79,7 @@ const ApiGolang = async (req, res) => {
             console.log(response.data)
             let update = 0
             if (!response.data.hasOwnProperty('update')) update += 2
-            return res.send({ updateLength: update, data: response.data })
+            return res.send({ updateLength: update, data: response.data , products: products })
         })
         .catch((error) => {
             console.log(error)

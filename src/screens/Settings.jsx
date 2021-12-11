@@ -16,8 +16,8 @@ export default class Settings extends Component {
         this.state = {
             ParallelPros: 10,
             ResumeFrom: 0,
-            FormInfo: { create: false, update: false, key: '', Site: 'https://firewallforce.se', title: false, description: false, priceStock: false, Categories: false, Images: false, Attributes: false },
-            seRadio: false,
+            FormInfo: { create: true, update: true, key: '', Site: 'https://firewallforce.se', title: true, description: true, priceStock: true, Categories: true, Images: true, Attributes: true },
+            seRadio: true,
             dkRadio: false,
             pkRadio: false,
             Key: '',

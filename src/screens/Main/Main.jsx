@@ -36,11 +36,11 @@ export default class PriceStock extends Component {
 			ImageLinx: [],
 			SeqFinish: '',
 			Categories: [],
-			FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: false, Images: true, Attributes: true },
+			FormInfo: { Site: 'https://firewallforce.se', priceStock: true, Categories: true, Images: true, Attributes: true },
 			firewallRadio: true,
 			denmarkRadio: false,
 			Updated: 0,
-			concurrency: 2,
+			concurrency: 20,
 			Interface: 'Schedule'
 		}
 	}
@@ -145,10 +145,9 @@ export default class PriceStock extends Component {
 
 		this.setState({ NextSequence: false })
 		console.log(`Pro Count :: ${Pro.length}`)
-		Pro = this.refineStockPrices(Pro)
 		this.ParseImages(Pro)
 
-		alert(JSON.stringify(this.state.FormInfo))
+		// alert(JSON.stringify(this.state.FormInfo))
 
 
 		var jsonBody = { products: Pro, config: this.state.FormInfo }
@@ -175,9 +174,8 @@ export default class PriceStock extends Component {
 
 
 		ProductCount += this.state.concurrency;
-
 		console.log(`Products :: ${ProductCount}`)
-
+        this.reupdate(resp.products)
 		App.setState({
 			//Updated: this.state.Updated + jsnArray[jsnArray.length - 1].updated,
 			SequenceCount: this.state.SequenceCount + this.state.concurrency,
@@ -210,22 +208,22 @@ export default class PriceStock extends Component {
 	}
 
 
-	refineStockPrices = (Products) => {
-		Products.map((product) => {
-			if (!product.hasOwnProperty('supplierPriceInfo')) {
-				product.supplierPriceInfo = { price: 0 }
-			}
-			if (!product.hasOwnProperty('supplierStockInfo')) {
-				product.supplierPriceInfo = { price: 0 }
-				product.supplierStockInfo = { stock: 0, stockStatusText: "Not Available" }
-			}
+	// refineStockPrices = (Products) => {
+	// 	Products.map((product) => {
+	// 		if (!product.hasOwnProperty('supplierPriceInfo')) {
+	// 			product.supplierPriceInfo = { price: 0 }
+	// 		}
+	// 		if (!product.hasOwnProperty('supplierStockInfo')) {
+	// 			product.supplierPriceInfo = { price: 0 }
+	// 			product.supplierStockInfo = { stock: 0, stockStatusText: "Not Available" }
+	// 		}
 
-			product.fields_in_response = ['id', 'sku', 'stock']
-			product.type = 'simple'
-		})
+	// 		product.fields_in_response = ['id', 'sku', 'stock']
+	// 		product.type = 'simple'
+	// 	})
 
-		return Products
-	}
+	// 	return Products
+	// }
 
 	getRespArray = (Jsn) => {
 		var array = []
@@ -242,18 +240,11 @@ export default class PriceStock extends Component {
 
 	reupdate = (respJson) => {
 
-
 		console.log(`reupdate: respJson Length :: ${respJson.length}`)
 		console.log(`respJson 0 type :: ${typeof respJson[0]}`)
 		console.log(`has Files :: ${respJson[0].hasOwnProperty('Files')}`)
 
-		// if (respJson[0].hasOwnProperty('Files')) this.FireNeatify(respJson[0].Files)
-		// if (respJson[1].hasOwnProperty('Files')) this.FireNeatify(respJson[1].Files)
-		// if (respJson[2].hasOwnProperty('Files')) this.FireNeatify(respJson[2].Files)
-		// if (respJson[3].hasOwnProperty('Files')) this.FireNeatify(respJson[3].Files)
-		// if (respJson[4].hasOwnProperty('Files')) this.FireNeatify(respJson[4].Files)
-
-		for (let n = 0; n <= 5; n++) {
+		for (let n = 0; n <= respJson.length - 1; n++) {
 			if (respJson[n].hasOwnProperty('Files')) this.FireNeatify(respJson[n].Files)
 		}
 
@@ -263,6 +254,10 @@ export default class PriceStock extends Component {
 
 
 	FireNeatify = (Files) => {
+
+		try {
+			firebase.initializeApp(firebaseConfig)
+		} catch (ex) {}
 
 		var storageRef = firebase.storage().ref()
 
