@@ -33,8 +33,9 @@ const bundleInfo = async (product, config) => {
     }
 
     if (config.Images) {
-        simple = await uploadImages2(product, simple)
-        console.log(`simple.images :: ${simple.images}`)
+        //   simple = await uploadImages2(product, simple)
+        simple.images = product.images
+        console.log(`product.images :: ${product.images}`)
     }
 
     if (config.Attributes) simple.attributes = getAttributes(product)
@@ -61,9 +62,9 @@ const ApiGolang = async (req, res) => {
     })
 
     var products = await Promise.all(requests)
-    
+
     console.log(`final Products : ${JSON.stringify(products)}`)
-    
+
     var config = {
         method: 'POST',
         //url: `https://us-central1-my-first-project-ce24e.cloudfunctions.net/ITScopePro?images=${config.Images}&attributes=${config.Attributes}&categories=${config.Categories}`,
@@ -79,7 +80,7 @@ const ApiGolang = async (req, res) => {
             console.log(response.data)
             let update = 0
             if (!response.data.hasOwnProperty('update')) update += 2
-            return res.send({ updateLength: update, data: response.data , products: products })
+            return res.send({ updateLength: update, data: response.data, products: products })
         })
         .catch((error) => {
             console.log(error)
