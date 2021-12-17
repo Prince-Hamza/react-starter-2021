@@ -1,0 +1,190 @@
+
+Blade chassis
+Cabel Channel
+Camcorder Accessory
+Ceiling Mount
+"Charging "
+Cleaning Device Accessory
+Communications Connector
+"CompactFlash (CF Typ 1 "
+Control module
+Converter
+Cooling Accessory
+CurrencyApi
+Data logger
+Diagonal Pliers
+Digital Signage Player
+Disk array
+Distribution Cabinet
+Drive Enclosure
+Drum Cartridge
+DVD Burner
+Electrical Box
+Environmental Meter
+Extended Capacity SD (MicroSDHC)
+Extension Cable
+Finisher
+Firewire Controller
+Flash-Speicher  unsortiert
+Floppy Disk Drive
+Frequency Changer
+Fuse
+Fuser
+Gamepad
+Gateway
+GPS Antenna
+Graphics card
+Ground
+Hand Scanner
+Hand Tool
+Handset
+Hard Drive Accessory
+Hazard Detector
+Heatsink
+House Appliance Accessory
+Hub
+Incandescent
+Info
+Ink Cartridge
+Input Device Accessory
+Input Service & Support
+Irrigation Equipment
+ISDN Comfort Phone
+Jewel Case
+Joystick
+Keyboard
+KVM console
+Kvm Switch
+Laboratory Connectors
+Lamp
+LED
+Lens Filter
+Limit Switch
+Line Interactive UPS
+"LTO "
+Maintenance Kit
+Micro SD
+Microphone
+Mini tower
+Mobile Phone Accessory
+Modding Accessory
+Motion Sensor
+Mouse
+Mouse; Trackball
+Mousepad
+Multimeter
+Network Camera Accessory
+Network Camera; Webcam
+Network drive
+Network Security Accessory
+Network Service &amp; Support
+Network Tester
+Notebook
+Notebook Security
+Notebook-CPU
+Nut
+Online UPS
+Optical Drive Accessory
+Oscilloscope
+Other Accessory
+Other Antenna
+Other Fastening Material
+Other Furniture
+Other Input Device
+Other Measuring Tools
+Other Notebook Accessories
+Other Power Tools
+Other Sensor
+Other Switch
+Other USB device
+Outlet Cover
+Output Service & Support
+Output Service &amp; Support
+PA Gear
+Palm rest
+Paper Shredder
+PBX
+PBX Accessory
+PCB Connector
+Pda Accessories
+Phone
+Phone Accessory
+Plate
+PoE Injector
+PoE Splitter
+Port replicator
+POS Accessory
+Power Contactor
+Presenter
+Print Server
+Products
+Projector Accessory
+Punchdown Tool
+Pushbutton Switch
+RAIL
+RCD
+Rechargable Battery
+Rejected Product
+Relay
+Remote
+Remote Maintenance Module
+Repeater
+"Rotary "
+Screw
+Screw Terminal
+Screwdriver
+Secure Digital (SD)
+Security Camera
+Server-CPU
+Service & Support
+Service &amp; Support
+Small Appliance Accessory
+Smartphone
+Smartwatch
+Software Accessory
+Software Service Support
+Sound Card
+Speaker
+Speaker System
+Steering Wheel
+Strain Relief
+Subscription License
+Subwoofer
+Suitcase
+Surveillance System
+Systems Service &amp; Support
+"Test Lead "
+Thin Client
+Three-phase power equipment
+Toner Cartridge
+Tool Accessory
+Tool Set
+Touchpad
+Trackball
+Transceiver
+Transfer Unit
+Transformer
+TV card
+Twist-On Connector
+Uplink Module
+UPS Accessory
+UPS Accumulator
+USB Controller
+USB hub
+USB-Stick
+Various A
+Various Cable Accessory
+Various Cleaning Tool
+Various Outlet Series
+Various Printing Accessories
+VGA to TV Converter
+Video Card
+VOIP Accessory
+Voip phone
+Voip Phone
+Wall Mount
+Washer
+Webcam
+Wide Angle
+Wire Stripper
+Workstation

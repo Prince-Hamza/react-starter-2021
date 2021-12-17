@@ -6,7 +6,7 @@ const GolangApiSet = require("./Golang")
 const UbuntuApiSet = require("./UbuntuVm")
 
 
-router.post('/golangserver', GolangApiSet.ApiGolang)
+router.post('/golangserver', GolangApiSet.ApiFirebase)
 router.post('/vmstart', UbuntuApiSet.StartVm)
 
 

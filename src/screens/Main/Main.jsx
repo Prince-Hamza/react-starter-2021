@@ -40,7 +40,7 @@ export default class PriceStock extends Component {
 			firewallRadio: true,
 			denmarkRadio: false,
 			Updated: 0,
-			concurrency: 2,
+			concurrency: 500,
 			Interface: 'Schedule'
 		}
 	}
@@ -175,9 +175,10 @@ export default class PriceStock extends Component {
 
 		ProductCount += this.state.concurrency;
 		console.log(`Products :: ${ProductCount}`)
-        this.reupdate(resp.products)
+
 		App.setState({
 			//Updated: this.state.Updated + jsnArray[jsnArray.length - 1].updated,
+			Updated: this.state.SequenceCount + this.state.concurrency,
 			SequenceCount: this.state.SequenceCount + this.state.concurrency,
 			NextSequence: true
 		})
@@ -207,23 +208,6 @@ export default class PriceStock extends Component {
 
 	}
 
-
-	// refineStockPrices = (Products) => {
-	// 	Products.map((product) => {
-	// 		if (!product.hasOwnProperty('supplierPriceInfo')) {
-	// 			product.supplierPriceInfo = { price: 0 }
-	// 		}
-	// 		if (!product.hasOwnProperty('supplierStockInfo')) {
-	// 			product.supplierPriceInfo = { price: 0 }
-	// 			product.supplierStockInfo = { stock: 0, stockStatusText: "Not Available" }
-	// 		}
-
-	// 		product.fields_in_response = ['id', 'sku', 'stock']
-	// 		product.type = 'simple'
-	// 	})
-
-	// 	return Products
-	// }
 
 	getRespArray = (Jsn) => {
 		var array = []
@@ -257,7 +241,7 @@ export default class PriceStock extends Component {
 
 		try {
 			firebase.initializeApp(firebaseConfig)
-		} catch (ex) {}
+		} catch (ex) { }
 
 		var storageRef = firebase.storage().ref()
 
@@ -291,7 +275,7 @@ export default class PriceStock extends Component {
 		return string.split(subString, index).join(subString).length;
 	}
 
-	handleResume = (e) => {
+	handleResume (e) {
 		this.setState({ ResumeFrom: e.target.value })
 	}
 

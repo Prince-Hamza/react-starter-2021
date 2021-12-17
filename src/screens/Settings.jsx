@@ -22,7 +22,8 @@ export default class Settings extends Component {
             pkRadio: false,
             Key: '',
             overlayer: false,
-            commands: 1
+            commands: 1,
+            ResumeFrom: 0
         }
     }
 
@@ -86,6 +87,9 @@ export default class Settings extends Component {
         })
     }
 
+	handleResume = (e) => {
+		this.setState({ ResumeFrom: e.target.value })
+	}
 
     render() {
         return (

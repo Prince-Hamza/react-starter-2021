@@ -48,9 +48,14 @@ const streamJson = (ws) => {
         var stream = request.get(`https://api.itscope.com/2.0/products/exports/${req.params.key}`).auth('m135172', 'GXBlezJK0n-I55K4RV_f0vHIRrFq_YcTNh9Yz735LJs', false)
 
         stream.on('data', (buffer) => {
+
             let JsonParticle = getJsonFromBuffer(buffer)
             let lineStream = JsonParticle.split('\n')
             lineStream.map((line) => compiler.parseLine(line))
+        })
+
+        stream.on('complete', () => {
+            fs.writeFileSync('./complete', "complete")
         })
 
     })
@@ -198,6 +203,7 @@ class streamingCompiler {
     makeKeyVauePair = (line) => {
 
         if (line.includes('puid') && !this.first) {
+            // console.log(`resume count : ${this.resumeCount}`)
             //console.log('product complete')
             this.product = this.product
             this.product = this.product.substring(0, this.product.lastIndexOf('}'))
@@ -214,7 +220,14 @@ class streamingCompiler {
             this.proReadyCount++
             if (parseFinalize !== undefined) {
                 VirtualProcess && ubuntuVM.onProduct(parseFinalize)
-                !VirtualProcess && this.socket.send(JSON.stringify(parseFinalize))
+                if (!VirtualProcess && this.resumeCount >= this.proReadyCount) {
+                    this.socket.send(JSON.stringify({ Skip: true }))
+                }
+
+                //else if (!VirtualProcess && this.resumeCount >= this.proReadyCount) {
+                //     this.socket.send(JSON.stringify(parseFinalize))
+                // }
+                this.socket.send(JSON.stringify(parseFinalize))
             }
             this.product = ""
             this.first = true

@@ -1,11 +1,12 @@
 const config = {
-    apiKey: "AIzaSyCnD-xueHVA0gwNjBLUu5hlB8x8jhMMgOw",
-    authDomain: "kidland-5754b.firebaseapp.com",
-    databaseURL: "https://kidland-5754b-default-rtdb.firebaseio.com",
-    projectId: "kidland-5754b",
-    storageBucket: "kidland-5754b.appspot.com",
-    messagingSenderId: "291891653552",
-    appId: "1:291891653552:web:013a263ba778e7f60ac475"
+    apiKey: "AIzaSyCpbA7hkpG-eVKlfun41wJ1XXCwxb_Iqys",
+    authDomain: "firewallforce-se.firebaseapp.com",
+    databaseURL: "https://firewallforce-se-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "firewallforce-se",
+    storageBucket: "firewallforce-se.appspot.com",
+    messagingSenderId: "237028000069",
+    appId: "1:237028000069:web:8dede286c7e8c3c0b23e2c",
+    measurementId: "G-MKCYF9XE42"
 }
 
 module.exports = config

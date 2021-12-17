@@ -7,25 +7,23 @@ var cachedCategories = []
 
 const getCategoryIdByName = async (categoryName) => {
     var categoryId = 0
+    var categoryObject
+
 
     categoryName = modifyCatName(categoryName)
 
-    console.log(`cat name :: ${categoryName}`)
+    // console.log(`cat name :: ${categoryName}`)
 
     if (cachedCategories.length == 0) {
         var categories = await listCategories()
-        console.log(categories)
         cachedCategories = categories
     }
-
-    //if (!cachedCategories)cachedCategories = await listCategories()
-
-
 
     cachedCategories.forEach((cat) => {
         if (cat.name == categoryName) {
             categoryId = cat.id
-            console.log(`Found Category : ${categoryId}`)    // :x | 
+            categoryObject = { name: cat.name, id: cat.id }
+            // console.log(`Found Category : ${categoryId}`)    // :x | 
         }
     })
 
@@ -34,8 +32,10 @@ const getCategoryIdByName = async (categoryName) => {
     if (categoryId == 0) {
         console.log(`category not found lets create`)
         categoryId = await createCategory(categoryName)
+        categoryObject = { name: categoryName, id: categoryId }
     }
-    return categoryId
+
+    return categoryObject
 
 }
 
@@ -53,7 +53,7 @@ const modifyCatName = (categoryName) => {
 const createCategory = async (catName) => {
 
 
-    console.log(`creating category`)
+    // console.log(`creating category`)
 
     var WooCommerceApi = WooCommerceRestApi.default;
 
@@ -67,7 +67,7 @@ const createCategory = async (catName) => {
 
 
     try {
-        console.log(`CREATE CATEGORY :: ${catName}`)
+        // console.log(`CREATE CATEGORY :: ${catName}`)
 
         const data = {
             name: catName.toString(),

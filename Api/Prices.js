@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const firebase = require('firebase/compat/app').default
 require("firebase/compat/database");
 
+var rateInfoCache = ''
 class Prices {
 
     getFinalPrice = async (Product) => {
@@ -10,8 +11,12 @@ class Prices {
 
         try { firebase.initializeApp(config) } catch (ex) { }
 
+        firebase.database().ref('/CurrencyApi').update({
+            valid: true
+        })
+
+
         const inputPrice = this.selectInput(Product)
-        console.log(`inputPrice :: ${inputPrice}`)
         var price = await this.currencyExchange(inputPrice)
         // console.log(`Final Price :: ${price}`)
         var intPrice = parseFloat(price)
@@ -28,19 +33,26 @@ class Prices {
     }
 
     currencyExchange = async (Eur) => {
+        var Fireval
+        if (rateInfoCache == '') {
+            const FireData = await firebase.database().ref('/CurrencyApi').once('value')
+            Fireval = FireData.val()
+            rateInfoCache = Fireval
+        } else {
+            Fireval = rateInfoCache
+        }
 
-        const FireData = await firebase.database().ref('/CurrencyApi').once('value')
-        var Fireval = FireData.val()
-        // console.log(`Firebase currency Api Reponse :: ${Fireval} `)
+        console.log(`Firebase currency Api Reponse :: ${Fireval} `)
 
         var nowDate = new Date();
         var date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate();
         // console.log(`now Date :: ${date}`)
         // console.log(`fireval Date :: ${Fireval.Date}`)
 
-        var Method = (date === Fireval.Date) ? this.priceByFire : this.useCurrencyResp
+        // var Method = (Fireval.hasOwnProperty('Date') && date === Fireval.Date) ? this.priceByFire : this.useCurrencyResp
+        var Method = this.priceByFire
         var Final = await Method(Fireval.Info, Eur)
-        console.log(Final)
+        // console.log(Final)
         return Final
     }
 
